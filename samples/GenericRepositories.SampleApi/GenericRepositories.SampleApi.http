@@ -1,0 +1,43 @@
+@baseUrl = http://localhost:5116
+@json = application/json
+
+### Health / root
+GET {{baseUrl}}/
+
+### List all products
+GET {{baseUrl}}/api/products
+
+### Create product (captures returned id to {{productId}})
+# @name createProduct
+POST {{baseUrl}}/api/products
+Content-Type: {{json}}
+
+{
+  "name": "Monitor 27",
+  "price": 299.99
+}
+
+> {%
+    client.global.set("productId", response.body.id);
+%}
+
+### Get by id
+GET {{baseUrl}}/api/products/{{productId}}
+
+### Update by id
+PUT {{baseUrl}}/api/products/{{productId}}
+Content-Type: {{json}}
+
+{
+  "name": "Monitor 27 Pro",
+  "price": 349.99
+}
+
+### Verify update
+GET {{baseUrl}}/api/products/{{productId}}
+
+### Delete by id
+DELETE {{baseUrl}}/api/products/{{productId}}
+
+### Verify delete (should return 404)
+GET {{baseUrl}}/api/products/{{productId}}

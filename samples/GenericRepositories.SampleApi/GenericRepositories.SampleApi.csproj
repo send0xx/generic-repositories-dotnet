@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\GenericRepositories.Abstractions\GenericRepositories.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\GenericRepositories.EntityFramework\GenericRepositories.EntityFramework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+  </ItemGroup>
+
+</Project>

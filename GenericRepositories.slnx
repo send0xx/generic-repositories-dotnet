@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/GenericRepositories.SampleApi/GenericRepositories.SampleApi.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/GenericRepositories.Abstractions/GenericRepositories.Abstractions.csproj" />
+    <Project Path="src/GenericRepositories.EntityFramework/GenericRepositories.EntityFramework.csproj" />
+  </Folder>
+</Solution>
