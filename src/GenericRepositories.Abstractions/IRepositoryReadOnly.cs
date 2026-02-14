@@ -7,6 +7,8 @@ namespace GenericRepositories.Abstractions;
 public interface IRepositoryReadOnly<TEntity>
     where TEntity : class
 {
+    IDataAccessContext DataAccessContext { get; }
+
     Task<TEntity?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull;
 
     Task<TEntity?> FirstOrDefaultAsync(CancellationToken cancellationToken = default);

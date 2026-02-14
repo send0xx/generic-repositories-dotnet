@@ -4,18 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GenericRepositories.EntityFramework;
 
-public class RepositoryReadOnly<TDbContext, TEntity>(TDbContext dbContext) : IRepositoryReadOnly<TEntity>
+public class RepositoryReadOnly<TDbContext, TEntity>(DataAccessContextReadOnly<TDbContext> dataAccessContext)
+    : IRepositoryReadOnly<TEntity>
     where TDbContext : DbContext
     where TEntity : class
 {
-    // ReSharper disable once MemberCanBePrivate.Global
-    protected TDbContext DbContext { get; } = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+    public IDataAccessContext DataAccessContext => dataAccessContext;
 
+    // ReSharper disable once MemberCanBePrivate.Global
+    protected TDbContext DbContext => dataAccessContext.DbContext;
+
+    // Warning: DbSet queries are tracked by default. Use Query() instead to ensure no-tracking behavior, or call AsNoTracking/AsNoTrackingWithIdentityResolution.
     // ReSharper disable once MemberCanBePrivate.Global
     protected DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
     // ReSharper disable once VirtualMemberNeverOverridden.Global
-    protected virtual IQueryable<TEntity> Query() => DbSet.AsNoTracking();
+    protected virtual IQueryable<TEntity> Query() => DbSet.AsNoTrackingWithIdentityResolution();
 
     public virtual async Task<TEntity?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default)
         where TId : notnull

@@ -3,8 +3,14 @@ using GenericRepositories.SampleApi.Data;
 
 namespace GenericRepositories.SampleApi.Infrastructure;
 
-public class AppRepositoryReadOnly<TEntity>(AppDbContext dbContext) : RepositoryReadOnly<AppDbContext, TEntity>(dbContext)
+public class AppDataAccessContextReadOnly(AppDbContext dbContext) : DataAccessContextReadOnly<AppDbContext>(dbContext);
+
+public class AppDataAccessContext(AppDbContext dbContext) : DataAccessContext<AppDbContext>(dbContext);
+
+public class AppRepositoryReadOnly<TEntity>(AppDataAccessContextReadOnly dataAccessContext)
+    : RepositoryReadOnly<AppDbContext, TEntity>(dataAccessContext)
     where TEntity : class;
 
-public class AppRepository<TEntity>(AppDbContext dbContext) : Repository<AppDbContext, TEntity>(dbContext)
+public class AppRepository<TEntity>(AppDataAccessContext dataAccessContext)
+    : Repository<AppDbContext, TEntity>(dataAccessContext)
     where TEntity : class;

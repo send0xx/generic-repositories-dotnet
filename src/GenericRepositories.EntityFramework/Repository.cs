@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GenericRepositories.EntityFramework;
 
-public class Repository<TDbContext, TEntity>(TDbContext dbContext)
+public class Repository<TDbContext, TEntity>(DataAccessContext<TDbContext> dataAccessContext)
     : IRepository<TEntity>
     where TDbContext : DbContext
     where TEntity : class
 {
+    public IDataAccessContext DataAccessContext => dataAccessContext;
+
     // ReSharper disable once MemberCanBePrivate.Global
-    protected TDbContext DbContext { get; } = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+    protected TDbContext DbContext => dataAccessContext.DbContext;
 
     // ReSharper disable once MemberCanBePrivate.Global
     protected DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
@@ -79,7 +81,4 @@ public class Repository<TDbContext, TEntity>(TDbContext dbContext)
     public void Remove(TEntity entity) => DbSet.Remove(entity);
 
     public void RemoveRange(IEnumerable<TEntity> entities) => DbSet.RemoveRange(entities);
-
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
-        DbContext.SaveChangesAsync(cancellationToken);
 }

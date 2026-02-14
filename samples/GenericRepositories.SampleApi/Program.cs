@@ -9,6 +9,8 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("GenericRepositoriesSampleDb"));
 
+builder.Services.AddScoped<AppDataAccessContextReadOnly>();
+builder.Services.AddScoped<AppDataAccessContext>();
 builder.Services.AddScoped(typeof(IRepositoryReadOnly<>), typeof(AppRepositoryReadOnly<>));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(AppRepository<>));
 
@@ -54,7 +56,7 @@ products.MapPost("/", async (CreateProductRequest request, IRepository<Product> 
     };
 
     await repository.AddAsync(product, cancellationToken);
-    await repository.SaveChangesAsync(cancellationToken);
+    await repository.DataAccessContext.SaveChangesAsync(cancellationToken);
 
     return Results.Created($"/api/products/{product.Id}", product);
 });
@@ -72,7 +74,7 @@ products.MapPut("/{id:guid}",
         product.Price = request.Price;
 
         repository.Update(product);
-        await repository.SaveChangesAsync(cancellationToken);
+        await repository.DataAccessContext.SaveChangesAsync(cancellationToken);
 
         return Results.Ok(product);
     });
@@ -86,7 +88,7 @@ products.MapDelete("/{id:guid}", async (Guid id, IRepository<Product> repository
     }
 
     repository.Remove(product);
-    await repository.SaveChangesAsync(cancellationToken);
+    await repository.DataAccessContext.SaveChangesAsync(cancellationToken);
 
     return Results.NoContent();
 });

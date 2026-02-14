@@ -16,6 +16,4 @@ public interface IRepository<TEntity> : IRepositoryReadOnly<TEntity>
     void Remove(TEntity entity);
 
     void RemoveRange(IEnumerable<TEntity> entities);
-
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
